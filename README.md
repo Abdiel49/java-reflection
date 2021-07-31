@@ -1,6 +1,6 @@
 # Accediendo a campos/atributos privados de un objeto JAVA
 
-> Hace unos dias tube que acceder al valor que tenia un objeto el cual era `private` por lo cual "no se puede" acceder directamente, tambien no podia aniadir un metodo `get()` que seria lo mas rapido, pero de no ser por esa restrinccion no habria este post. enlace del repositorio al final.
+> Hace unos días tuve que acceder al valor que tenia un objeto el cual era `private` por lo cual "no se puede" acceder directamente, también no podía añadir un método `get()` que seria lo mas rápido, pero de no ser por esa restricción no habría este post. enlace del repositorio al final.
 
 **Java JDK**
 
@@ -23,7 +23,7 @@ La estructura de archivos es:
 └── README.md
 ```
 
-Las clases `User` y `Address` serviran de ejemplo ejemplo y pruebas. `Explorer` contiene la funcionalidad a exponer y que explicaremos en este post, la clase `Main` creara instancias de User, Address y Explorer [repositorio](#repositorio).
+Las clases `User` y `Address` servirán de ejemplo ejemplo y pruebas. `Explorer` contiene la funcionalidad a exponer y que explicaremos en este post, la clase `Main` creara instancias de User, Address y Explorer [repositorio](#repositorio).
 
 
 `code/Address.java`
@@ -47,7 +47,7 @@ public class Address {
 }
 ```
 
-`Address.java` esta formado por un tipo de dato primitivo `int` y dos cadenas de caracteres `String`, estos _'atributos'_, que apartir de ahora los llamaremos **'campos'** (field), tienen el modificador de acceso `private` y definen al objeto Address que no posee getters o setters.
+`Address.java` esta formado por un tipo de dato primitivo `int` y dos cadenas de caracteres `String`, estos _'atributos'_, que a partir de ahora los llamaremos **'campos'** (field), tienen el modificador de acceso `private` y definen al objeto Address que no posee getters o setters.
 
 
 `code/User.java`
@@ -90,24 +90,24 @@ public class User {
 
 `User.java` consta de **campos** primitivos, cadena de caracteres, `java.util.Date` y `Address` que son tipos que encierran mas complejidad.  
 
-Ok como vemos todos los 'campos' de User y Address tienen el modificador de acceso: `private` y en las clases no tenemos metodos de acceso y menos modificar los valores de cada campo.
+Ok como vemos todos los 'campos' de User y Address tienen el modificador de acceso: `private` y en las clases no tenemos métodos de acceso y menos modificar los valores de cada campo.
 
 ## Objetivo
 
-El objetivo es mostrar como podemos accder, conocer y modificar campos que tengan, en este caso, el modificador de acceso `private` usando metodos de la clase `Object` y clases del paquete `java.lang.reflect`.
-Obten mas informacion en la seccion de [referencias](#referencias).
+El objetivo es mostrar como podemos acceder, conocer y modificar campos que tengan, en este caso, el modificador de acceso `private` usando métodos de la clase `Object` y clases del paquete `java.lang.reflect`.
+Obtén mas información en la sección de [referencias](#referencias).
 
 ## Algunos conceptos necesarios
 
-* **[Class<?>](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Class.html)** - Representa Clases e Interfaces de una aplicacion Java en ejecucion. Los tipos primitivos de Java (boolean, byte, char, short, int, long, float y double) y la palabra clave void también se representan como objetos `Class`. La clase `Class` expone mas caracteristicas de una clase o interfaz, la mayoria derivan del archivo de archivo `class` que el _class loader_ paso a la _Java Virtual Machine_ pero unas pocas caracteristicas estas determinadas por el entorno _class loading_ en tiempo de ejecucion.
+* **[Class<?>](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Class.html)** - Representa Clases e Interfaces de una aplicación Java en ejecución. Los tipos primitivos de Java (boolean, byte, char, short, int, long, float y double) y la palabra clave void también se representan como objetos `Class`. La clase `Class` expone mas características de una clase o interfaz, la mayoría derivan del archivo de archivo `class` que el _class loader_ paso a la _Java Virtual Machine_ pero unas pocas características estas determinadas por el entorno _class loading_ en tiempo de ejecución.
 
-* **[Object.getClass()](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Object.html)** - Devuelve la clase en tiempo de ejecucion del objeto
+* **[Object.getClass()](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Object.html)** - Devuelve la clase en tiempo de ejecución del objeto
   
-* **[java.lang.reflect](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/reflect/package-summary.html)** - Permite el acceso a la informacion sobre los campos (fields), metodos y constructores de las clases cargadas.
+* **[java.lang.reflect](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/reflect/package-summary.html)** - Permite el acceso a la información sobre los campos (fields), métodos y constructores de las clases cargadas.
 
 ### Main 
 
-En la clase main definimos un objeto User, Addres y Explorer; iremos llamando a los metodos de Explorer segun sea necesario.
+En la clase main definimos un objeto User, Address y Explorer; iremos llamando a los métodos de Explorer según sea necesario.
 
 `code/Main.java`
 ```java 
@@ -122,20 +122,20 @@ class Main {
 
 ## Fields - Campos
 
-Lo primero es conocer los campos que tiene el objeto user, y ademas el tipo de dato al que pertenecen (int, String, etc.) asi que en la clase `Explorer` definiremos el metodo `lookFields(Object o)` para imprimir informacion de los campos del objeto.
+Lo primero es conocer los campos que tiene el objeto user, y ademas el tipo de dato al que pertenecen (int, String, etc.) asi que en la clase `Explorer` definiremos el método `lookFields(Object o)` para imprimir información de los campos del objeto.
 
-Interactuando con la clase User en tiempo de ejecucion usando `user.getClass()`, de ello llamaremos al metodo `getDeclaredFields()` y lo almacenamos un un `Field[]` del paquete `java.lang.reflect.Field`.
+Interactuando con la clase User en tiempo de ejecución usando `user.getClass()`, de ello llamaremos al método `getDeclaredFields()` y lo almacenamos un un `Field[]` del paquete `java.lang.reflect.Field`.
 
 ```java
 Class<?> uClass = user.getClass();
 Field[] uFields = uClass.getDeclaredFields(); //contiene un arreglo con los campos del objeto 'user'
 ```
 
-Si conocempon el nombre de un campo, podemos accederlo mediante el metodo `uClass.getDeclaredField("field_name")`, pero como asumimos que no conocemos cuales son, iteraremos cada uno de los objetos `Field` en el arreglo, y obtendremos informacion de cada campo del objeto `User`.
+Si conocemos el nombre de un campo, podemos acceder mediante el método `uClass.getDeclaredField("field_name")`, pero como asumimos que no conocemos cuales son, iteraremos cada uno de los objetos `Field` en el arreglo, y obtendremos información de cada campo del objeto `User`.
 
-_Consulta la seccion de [**Referencias**](#referencias)_
+_Consulta la sección de [**Referencias**](#referencias)_
 
-Un ciclo _for-each_ nos ayudara a iterar el arreglo de campos y lo primero sera hacer de cada campo accesible con `setAccessible(true)`, ok ahora sobre el Objeto `Field` usaremos los metodos:
+Podemos iterar el arreglo de campos, pero primero debemos hacer accesible cada campo llamando al método `setAccessible(true)`, ok ahora sobre el Objeto `Field` usaremos los métodos:
 
 * **`getName()`** _String_ - para obtener el nombre del campo
 * **`getType()`** _Class<?>_ - para conocer el `Class` del campo
@@ -184,16 +184,16 @@ Field name:     married class type:     boolean         value:  false
 Field name:     address class type:     class Address           value:  City:   Duck town       Street: Donal Ave       Number: 204
 ```
 
-Ok ya sabemos como obtener informacion acerca de los campos de `User`, resaltan las clases de los campos `date` y los de tipo _'String'_ `java.lang.String` y `java.util.Date` respectivamente pero de la clase Address es `Address`, tambien el valor devuelto por casa uno de estos es interesante en el caso del campo `date` y `address` que para retornar el valor llaman al metodo `toString()` que la clase _Date_ y _Address_ tienen implementado, de lo contrario la salida seria una direccion en la memoria, algo asi:
+Ok ya sabemos como obtener información acerca de los campos de `User`, resaltan las clases de los campos `date` y los de tipo _'String'_ `java.lang.String` y `java.util.Date` respectivamente pero de la clase Address es `Address`, también el valor devuelto por casa uno de estos es interesante en el caso del campo `date` y `address` que para retornar el valor llaman al método `toString()` que la clase _Date_ y _Address_ tienen implementado, de lo contrario la salida seria una dirección en la memoria, algo asi:
 ```sh
 Field name:     address class type:     class Address           value:  Address@23fc625e
 ```
 
 ## Analizando el campo `address`
 
-Como vimos el en la salida hace uso del metodo to string para conocer el valor, pero si necesitamos conocer mas acerca de este objeto como crear nuevas instancias de esta para poder cambiarl el valor debemos hacer algunas cosas mas, si no puedes pasar a la [siguiente seccion](#modificando-campos)
+Como vimos el en la salida hace uso del método to string para conocer el valor, pero si necesitamos conocer mas acerca de este objeto como crear nuevas instancias de esta para poder cambiar el valor debemos hacer algunas cosas mas, si no puedes pasar a la [siguiente sección](#modificando-campos)
 
-Nuestro punto de partida sera conocer el nombre del campo o Field name (`address`) con lo cual podremos trabajar, empecemos por mandarlo a otro metodo si el nombre del campo coincide con el de 'address'.
+Nuestro punto de partida sera conocer el nombre del campo o Field name (`address`) con lo cual podremos trabajar, empecemos por mandarlo a otro método si el nombre del campo coincide con el de 'address'.
 
 ```java
 public void lookFields(Object o){
@@ -211,13 +211,13 @@ public void lookFields(Object o){
 private void instanceObject(Field f){ ... }
 ```
 
-Con el metodo `f.getType()` sobre el objeto `Field` obtenemos el objeto `Class` que identifica el tipo declarado para el campo representado por este objeto `Field`. 
+Con el método `f.getType()` sobre el objeto `Field` obtenemos el objeto `Class` que identifica el tipo declarado para el campo representado por este objeto `Field`. 
 
 Podemos repetir en mismo proceso para obtener los campos  y valores del objeto `address` usando `getDeclaredFields()` : `Field[]`, es exactamente igual, lo interesante es crear un objeto de esa clase con valores que queramos cambiar y es lo que haremos.
 
-Usando el la clase `Constructor` del paquete `java.lang.reflect` y el metodo `newInstance(Object... initargs) : T` podemos crear e inicializar una nueva instancia de la clase declarada por el constructor, con los parámetros de inicialización especificados.
+Usando el la clase `Constructor` del paquete `java.lang.reflect` y el método `newInstance(Object... initargs) : T` podemos crear una nueva instancia de la clase declarada por el constructor, con los parámetros de inicialización especificados.
 
-`Address` tiene los campos: `String : city`, `String : street` y `int : number`, el orden es y tipos de datos es muy importante porque instaciamos el objeto `Constructor` con la clase con el metodo `getConstructor(Class<?>... parameterTypes)` que recibe como parametro objetos Class que identifican los tipos de parametros formales del constructor, en el orden declarado.
+`Address` tiene los campos: `String : city`, `String : street` y `int : number`, el orden y tipos de datos son muy importante para el objeto `Constructor` con la clase con el método `getConstructor(Class<?>... parameterTypes)` que recibe como parámetro objetos Class que identifican los tipos de parámetros formales del constructor, en el orden declarado.
 
 ```java
 private Object instanceObject(Field f){
@@ -250,9 +250,9 @@ Como observamos ya tenemos una instancia del objeto `Address` con los campos dif
 <!-- modificar los atributos de User -->
 #### Modificando campos
 
-La clase `Field` posee metodos para modificar campos de tipo primitivo, y `set​(Object obj, Object value)` donde `obj` es el objeto cuyo campo debe modificarse y `value` el nuevo valor para el campo de obj que se está modificando, si el argumento del objeto especificado no es una instancia de la clase o interfaz (`User`) que declara el campo del objeto, el método arroja un `IllegalArgumentException` `IllegalAccessException`
+La clase `Field` posee métodos para modificar campos de tipo primitivo, y `set​(Object obj, Object value)` donde `obj` es el objeto cuyo campo debe modificarse y `value` el nuevo valor para el campo de obj que se está modificando, si el argumento del objeto especificado no es una instancia de la clase o interfaz (`User`) que declara el campo del objeto, el método arroja un `IllegalArgumentException` `IllegalAccessException`
 
-Aniadiremos el metodo `changeFields(Object o)` y `changeFieldValue` para ayudarnos a cambiar el valor de los campos, hasta este pundo ya conocemos en nombre de los campos podemos efectuar cambios, 
+Añadiremos el método `changeFields(Object o)` y `changeFieldValue` para ayudarnos a cambiar el valor de los campos, hasta este punto ya conocemos en nombre de los campos podemos efectuar cambios, 
 
 ```java
 import java.lang.reflect.Field;
@@ -295,11 +295,11 @@ Name:   Pedro Perez Pereira     DNI:    5896224CBN      Age:    25      Married:
 Name:   Este es un nombre cambiado      DNI:    Un nuevo DNI    Age:    55      Married:        false   Address:        City:   Toronto Street: Queen ave       Number: 404     Date:  Sat Jun 12 23:16:35 BOT 2021
 ```
 
-Puedes crear una instacia para el campo `addrees` como se vio en la seccion [Analizando el campo address](#analizando-el-campo-address)
+Puedes crear una instancia para el campo `address` como se vio en la sección [Analizando el campo address](#analizando-el-campo-address)
 
 
 ## Repositorio 
-[click aqui](https://github.com/Abdiel49/java-relfection)
+[click aquí](https://github.com/Abdiel49/java-relfection)
 
 
 ## Referencias
@@ -311,8 +311,3 @@ Puedes crear una instacia para el campo `addrees` como se vio en la seccion [Ana
 * [Java Method](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/reflect/Method.html)
 * [Java Modifier](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/reflect/Modifier.html)
 * [Constructor](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/reflect/Constructor.html)
-
-
-
-
-
