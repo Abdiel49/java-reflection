@@ -1,6 +1,6 @@
 # Accediendo a campos/atributos privados de un objeto JAVA
 
-> Hace unos días tuve que acceder al valor que tenia un objeto el cual era `private` por lo cual "no se puede" acceder directamente, también no podía añadir un método `get()` que seria lo mas rápido, pero de no ser por esa restricción no habría este post. [Enlace del repositorio](#repositorio)
+> Hace unos días tuve que acceder al valor que tenía un objeto el cual era `private` por lo cual "no se puede" acceder directamente, también no podía añadir un método `get()` que sería lo mas rápido, pero de no ser por esa restricción no habría este post. [Enlace del repositorio](#repositorio)
 
 **Java JDK**
 
@@ -23,7 +23,7 @@ La estructura de archivos es:
 └── README.md
 ```
 
-Las clases `User` y `Address` servirán de ejemplo ejemplo y pruebas. `Explorer` contiene la funcionalidad a exponer y que explicaremos en este post, la clase `Main` creara instancias de User, Address y Explorer [repositorio](#repositorio).
+Las clases `User` y `Address` servirán de ejemplo y pruebas. `Explorer` contiene la funcionalidad a exponer y que explicaremos en este post, la clase `Main` creara instancias de User, Address y Explorer [repositorio](#repositorio).
 
 
 `code/Address.java`
@@ -47,7 +47,7 @@ public class Address {
 }
 ```
 
-`Address.java` esta formado por un tipo de dato primitivo `int` y dos cadenas de caracteres `String`, estos _'atributos'_, que a partir de ahora los llamaremos **'campos'** (field), tienen el modificador de acceso `private` y definen al objeto Address que no posee getters o setters.
+`Address.java` está formado por un tipo de dato primitivo `int` y dos cadenas de caracteres `String`, estos _'atributos'_, que a partir de ahora los llamaremos **'campos'** (field), tienen el modificador de acceso `private` y definen al objeto Address que no posee getters o setters.
 
 
 `code/User.java`
@@ -94,7 +94,7 @@ Ok como vemos todos los 'campos' de User y Address tienen el modificador de acce
 
 ## Objetivo
 
-El objetivo es mostrar como podemos acceder, conocer y modificar campos que tengan, en este caso, el modificador de acceso `private` usando métodos de la clase `Object` y clases del paquete `java.lang.reflect`.
+El objetivo es mostrar comó podemos acceder, conocer y modificar campos que tengan, en este caso, el modificador de acceso `private` usando métodos de la clase `Object` y clases del paquete `java.lang.reflect`.
 Obtén mas información en la sección de [referencias](#referencias).
 
 ## Algunos conceptos necesarios
@@ -183,7 +183,7 @@ Field name:     married class type:     boolean         value:  false
 Field name:     address class type:     class Address           value:  City:   Duck town       Street: Donal Ave       Number: 204
 ```
 
-Ahora sabemos como obtener información acerca de los campos de `User`, resaltan las clases de los campos `date` y los de tipo _'String'_ `java.lang.String`, `java.util.Date` respectivamente, la clase `Address`, el valor devuelto por cada uno de estos campos es interesante en el caso del campo `date` y `address` que para retornar el valor llaman al método `toString()` que la clase _Date_ y _Address_ tienen implementado, de lo contrario la salida seria una dirección de memoria, algo asi:
+Ahora sabemos comó obtener información acerca de los campos de `User`, resaltan las clases de los campos `date` y los de tipo _'String'_ `java.lang.String`, `java.util.Date` respectivamente, la clase `Address`, el valor devuelto por cada uno de estos campos es interesante en el caso del campo `date` y `address` que para retornar el valor llaman al método `toString()` que la clase _Date_ y _Address_ tienen implementado, de lo contrario la salida sería una dirección de memoria, algo asi:
 ```sh
 Field name:     address class type:     class Address           value:  Address@23fc625e
 ```
@@ -214,7 +214,7 @@ Con el método `f.getType()` sobre el objeto `Field` obtenemos el objeto `Class`
 
 Podemos repetir en mismo proceso anterior para obtener los campos  y valores del objeto `address` usando `getDeclaredFields()`, es exactamente igual, lo interesante es crear un objeto de esa clase con valores que queramos cambiar y es lo que haremos.
 
-Usando el la clase `Constructor` del paquete `java.lang.reflect` y el método `newInstance(Object... initargs) : T` podemos crear una nueva instancia de la clase declarada por el constructor, con los parámetros de inicialización especificados.
+Usando la clase `Constructor` del paquete `java.lang.reflect` y el método `newInstance(Object... initargs) : T` podemos crear una nueva instancia de la clase declarada por el constructor, con los parámetros de inicialización especificados.
 
 `Address` tiene los campos: `String : city`, `String : street` y `int : number`, el orden y tipos de datos son muy importante para el objeto `Constructor` con la clase con el método `getConstructor(Class<?>... parameterTypes)` que recibe como parámetro objetos Class que identifican los tipos de parámetros formales del constructor, en el orden declarado.
 
